@@ -4,7 +4,7 @@
 rc=0
 device=/dev/aesdchar
 
-check_output()
+function check_output
 {
 	local read_file=$1
 	local expected_file=$2
@@ -31,7 +31,6 @@ echo "write10" > ${device}
 
 echo "The output below should show writes 1-10 in order"
 
-#read_file=`tempfile`	//works only in bash script
 read_file=$(mktemp)
 
 cat ${device} > ${read_file}
@@ -57,7 +56,6 @@ check_output ${read_file} ${expected_file}
 
 echo "write11" > ${device}
 
-#expected_file_2_to_11=`tempfile`	//works only in bash script
 expected_file_2_to_11=$(mktemp)
 
 cat >${expected_file_2_to_11}  << EOF
@@ -76,6 +74,7 @@ EOF
 cat ${device} > ${read_file}
 echo "The output should show writes 2-11 in order"
 cat ${read_file}
+
 check_output ${read_file} ${expected_file_2_to_11}
 
 echo -n "w" > ${device}
@@ -97,6 +96,7 @@ echo "e10" > ${device}
 echo "The output should show writes 1-10 in order, with write1 and write10 on a single line"
 cat ${device} > ${read_file}
 cat ${read_file}
+
 check_output ${read_file} ${expected_file}
 
 exit ${rc}
